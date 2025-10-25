@@ -33,4 +33,10 @@ public class TriviaApiController {
         return ResponseEntity.ok(categoryResponse);
     }
 
+    @GetMapping("/questions/categories")
+    public ResponseEntity<CategoryResponse> getCategories() {
+        CategoryResponse categoryResponse = triviaApiService.getAllCategories();
+        return ResponseEntity.ok(categoryResponse);
+    }
+
 }

@@ -15,7 +15,6 @@ import java.util.List;
 public class TriviaApiService {
 
     private final String apiUrl = "https://opentdb.com";
-    private final String amountTemplate = "?amount=";
     private final RestTemplate restTemplate;
 
     public TriviaApiService(RestTemplate restTemplate) {
@@ -24,6 +23,7 @@ public class TriviaApiService {
 
     public List<Question> getQuestionsWithAmount(int amount) {
         try {
+            String amountTemplate = "?amount=";
             TriviaResponse triviaResponse = restTemplate
                     .getForObject(apiUrl + "/api.php" + amountTemplate + amount, TriviaResponse.class);
             if (triviaResponse == null || triviaResponse.getResults() == null) {
