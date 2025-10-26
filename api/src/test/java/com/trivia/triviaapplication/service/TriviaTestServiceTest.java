@@ -1,10 +1,8 @@
-package com.trivia.triviaapplication.services;
-
+package com.trivia.triviaapplication.service;
 
 import com.trivia.triviaapplication.dto.Category;
 import com.trivia.triviaapplication.dto.CategoryResponse;
 import com.trivia.triviaapplication.exception.TriviaApiResponseException;
-import com.trivia.triviaapplication.service.TriviaApiService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
