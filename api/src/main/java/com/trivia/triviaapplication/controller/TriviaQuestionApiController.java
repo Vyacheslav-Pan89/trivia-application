@@ -12,22 +12,22 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/")
-public class TriviaApiController {
+@RequestMapping("/api/questions")
+public class TriviaQuestionApiController {
 
     private final TriviaApiService triviaApiService;
 
-    public TriviaApiController(TriviaApiService triviaApiService) {
+    public TriviaQuestionApiController(TriviaApiService triviaApiService) {
         this.triviaApiService = triviaApiService;
     }
 
-    @GetMapping("/questions/categories")
+    @GetMapping("/categories")
     public ResponseEntity<CategoryResponse> getCategories() {
         CategoryResponse categoryResponse = triviaApiService.getAllCategories();
         return ResponseEntity.ok(categoryResponse);
     }
 
-    @GetMapping("/questions")
+    @GetMapping()
     public ResponseEntity<List<Question>> getQuestions(QuestionRequest questionRequest) {
         List<Question> questions = triviaApiService.getQuestions(questionRequest);
         return ResponseEntity.ok(questions);

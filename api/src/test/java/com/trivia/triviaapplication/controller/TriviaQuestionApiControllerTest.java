@@ -17,8 +17,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(TriviaApiController.class)
-public class TriviaApiControllerTest {
+@WebMvcTest(TriviaQuestionApiController.class)
+public class TriviaQuestionApiControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
