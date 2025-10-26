@@ -21,11 +21,19 @@ public class PlayerController {
     public ResponseEntity<List<PlayerModel>> getAllPlayers() {
         return ResponseEntity.ok(playerService.getAllPlayers());
     }
-    @PostMapping("/add")
-    public ResponseEntity<PlayerModel> addNewPlayer(@RequestBody PlayerModel playerModel){
-        playerService.addNewPlayer(playerModel);
-        System.out.println(playerModel.getNumberOfWrongAnswers());
-        return ResponseEntity.ok(playerModel);
+
+    @GetMapping("/get")
+    public ResponseEntity<PlayerModel> getPlayerByUserName(@RequestParam(name = "username") String userName) {
+        System.out.println(userName);
+        return ResponseEntity.ok(playerService.getPlayerByUserName(userName));
     }
-    //ToDo: Error Handling
+
+    @PostMapping("/add")
+    public ResponseEntity<PlayerModel> addNewPlayer(@RequestBody PlayerModel playerModel) {
+        playerService.addNewPlayer(playerModel);
+        return ResponseEntity.ok(playerModel);
+    }// ToDo: test case required
+
+
+    //ToDo: More requests, Error Handling and Tests
 }

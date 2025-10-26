@@ -12,8 +12,8 @@ public class PlayerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, updatable = false, nullable = false)
-    private String name;
+    @Column(unique = true, updatable = false, nullable = false, name = "user_name")
+    private String userName;
 
     @Column(name = "correct_answers")
     private Long numberOfCorrectAnswers;
