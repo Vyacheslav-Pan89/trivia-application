@@ -18,6 +18,7 @@
     <modules>
         <module>api</module>
         <module>core</module>
+        <module>persistence</module>
     </modules>
 
     <properties>
