@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TriviaapplicationApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TriviaapplicationApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TriviaapplicationApplication.class, args);
+    }
 
 }

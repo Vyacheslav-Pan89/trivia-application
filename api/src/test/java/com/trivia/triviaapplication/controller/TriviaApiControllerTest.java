@@ -1,5 +1,6 @@
 package com.trivia.triviaapplication.controller;
 
+
 import com.trivia.triviaapplication.dto.Question;
 import com.trivia.triviaapplication.dto.QuestionRequest;
 import com.trivia.triviaapplication.service.TriviaApiService;
@@ -12,17 +13,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(TriviaApiController.class)
 public class TriviaApiControllerTest {
 
     @Autowired
-    private  MockMvc mockMvc;
+    private MockMvc mockMvc;
     @MockitoBean
-    private  TriviaApiService triviaApiService;
+    private TriviaApiService triviaApiService;
 
     @Test
     public void shouldReturnQuestions() throws Exception {
