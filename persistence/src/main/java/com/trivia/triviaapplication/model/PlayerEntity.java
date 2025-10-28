@@ -16,9 +16,9 @@ public class PlayerEntity {
     private String userName;
 
     @Column(name = "correct_answers")
-    private Long numberOfCorrectAnswers;
+    private Long totalNumberOfCorrectAnswers;
 
     @Column(name = "wrong_answers")
-    private Long numberOfWrongAnswers;
+    private Long totalNumberOfWrongAnswers;
 
 }

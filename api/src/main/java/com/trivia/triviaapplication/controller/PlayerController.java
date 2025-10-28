@@ -1,5 +1,6 @@
 package com.trivia.triviaapplication.controller;
 
+import com.trivia.triviaapplication.dto.GameResult;
 import com.trivia.triviaapplication.model.PlayerModel;
 import com.trivia.triviaapplication.service.PlayerService;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,6 @@ public class PlayerController {
 
     @GetMapping("/get")
     public ResponseEntity<PlayerModel> getPlayerByUserName(@RequestParam(name = "username") String userName) {
-        System.out.println(userName);
         return ResponseEntity.ok(playerService.getPlayerByUserName(userName));
     }
 
@@ -34,6 +34,15 @@ public class PlayerController {
         return ResponseEntity.ok(playerModel);
     }// ToDo: test case required
 
+    @PutMapping()
+    public ResponseEntity<PlayerModel> updateUserScore(@RequestBody GameResult gameResult) {
+        return ResponseEntity.ok(playerService.updatePlayerScoreByGameResult(gameResult));
+    }//ToDo: Test cases required!
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PlayerModel> deletePlayer(@PathVariable Long id){
+        return ResponseEntity.ok(playerService.deletePlayet(id));
+    }
 
     //ToDo: More requests, Error Handling and Tests
 }

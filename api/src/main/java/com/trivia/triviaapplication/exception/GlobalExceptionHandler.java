@@ -20,11 +20,17 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(UserNotFoundByUserName.class)
-    public ResponseEntity<String> handleUserNotFoundByUserName(UserNotFoundByUserName exception){
-        return new ResponseEntity<>("Response from application: " +exception.getMessage(),
+    @ExceptionHandler(UserNotFoundByUserNameException.class)
+    public ResponseEntity<String> handleUserNotFoundByUserName(UserNotFoundByUserNameException exception) {
+        return new ResponseEntity<>("Response from application: " + exception.getMessage(),
                 HttpStatus.NOT_FOUND);
     } //ToDo: test case required!
+
+    @ExceptionHandler(PlayerWithUserNameAlreadyExistException.class)
+    public ResponseEntity<String> handlePlayerWithUserNameAlreadyExistException(
+            PlayerWithUserNameAlreadyExistException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }//ToDo: test case required!
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
