@@ -7,7 +7,8 @@ import com.trivia.triviaapplication.model.PlayerEntity;
 import com.trivia.triviaapplication.model.PlayerModel;
 import com.trivia.triviaapplication.repository.PlayerRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,17 +41,17 @@ public class PlayerService {
         playerEntity.setTotalNumberOfWrongAnswers(0L);
         try {
             playerRepository.save(playerEntity);
-        } catch (DataAccessException exception) {
+        } catch (DataIntegrityViolationException exception) {
             throw new PlayerWithUserNameAlreadyExistException("Player with this username already exist.");
         }
-    }//ToDo: Test case required!
+    }
 
     public PlayerModel getPlayerByUserName(String userName) {
         PlayerModel playerModel = new PlayerModel();
         Optional<PlayerEntity> optionalPlayerEntity = playerRepository.findByUserName(userName);
         if (optionalPlayerEntity.isEmpty()) {
             throw new UserNotFoundByUserNameException("No user found with user name: " + userName);
-        } //ToDo: test case required
+        } //ToDo: Additional test case required
         PlayerEntity playerEntity = optionalPlayerEntity.get();
         playerModel.setUserName(playerEntity.getUserName());
         playerModel.setTotalNumberOfWrongAnswers(playerEntity.getTotalNumberOfWrongAnswers());
@@ -62,10 +63,8 @@ public class PlayerService {
     public PlayerModel updatePlayerScoreByGameResult(GameResult gameResult) {
         String userName = gameResult.getUserName();
         PlayerEntity playerEntityToUpdate = getPlayerEntity(userName);
-        playerEntityToUpdate.setTotalNumberOfWrongAnswers
-                (playerEntityToUpdate.getTotalNumberOfWrongAnswers() + gameResult.getNumberOfWrongAnswers());
-        playerEntityToUpdate.setTotalNumberOfCorrectAnswers
-                (playerEntityToUpdate.getTotalNumberOfCorrectAnswers() + gameResult.getNumberOfCorrectAnswers());
+        playerEntityToUpdate.setTotalNumberOfWrongAnswers(playerEntityToUpdate.getTotalNumberOfWrongAnswers() + gameResult.getNumberOfWrongAnswers());
+        playerEntityToUpdate.setTotalNumberOfCorrectAnswers(playerEntityToUpdate.getTotalNumberOfCorrectAnswers() + gameResult.getNumberOfCorrectAnswers());
         playerRepository.save(playerEntityToUpdate);
         return mapPlayerModel(playerEntityToUpdate);
     }//ToDo: test for edge cases, write tests.
@@ -78,8 +77,7 @@ public class PlayerService {
 
     private PlayerEntity getPlayerEntity(String userName) {
         Optional<PlayerEntity> optionalPlayerEntity = playerRepository.findByUserName(userName);
-        return optionalPlayerEntity.orElseThrow(
-        () -> new UserNotFoundByUserNameException("No such user found: " + userName));
+        return optionalPlayerEntity.orElseThrow(() -> new UserNotFoundByUserNameException("No such user found: " + userName));
     }
 
     private PlayerModel mapPlayerModel(PlayerEntity playerEntity) {

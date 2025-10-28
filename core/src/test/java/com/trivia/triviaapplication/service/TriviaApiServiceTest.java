@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TriviaTestServiceTest {
+public class TriviaApiServiceTest {
 
     @Mock
     private RestTemplate restTemplate;

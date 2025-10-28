@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/player/")
+@RequestMapping("/api/player")
 public class PlayerController {
 
     private final PlayerService playerService;
@@ -39,9 +39,9 @@ public class PlayerController {
         return ResponseEntity.ok(playerService.updatePlayerScoreByGameResult(gameResult));
     }//ToDo: Test cases required!
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<PlayerModel> deletePlayer(@PathVariable Long id){
-        return ResponseEntity.ok(playerService.deletePlayet(id));
+    @DeleteMapping("/delete")
+    public ResponseEntity<PlayerModel> deletePlayer(@RequestParam(name = "user_name") String userName) {
+        return ResponseEntity.ok(playerService.deletePlayer(userName));
     }
 
     //ToDo: More requests, Error Handling and Tests
