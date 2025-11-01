@@ -32,4 +32,7 @@ public class TriviaQuestionApiController {
         List<Question> questions = triviaApiService.getQuestions(questionRequest);
         return ResponseEntity.ok(questions);
     }
+
+    //ToDo: More requests,Validation, Error Handling and Tests
+
 }

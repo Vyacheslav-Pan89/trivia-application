@@ -10,5 +10,7 @@ import java.util.Optional;
 public interface PlayerRepository extends CrudRepository<PlayerEntity, Long> {
     Optional<PlayerEntity> findByUserName(String userName);
 
-    PlayerEntity deleteByUserName(PlayerEntity playerEntity);
+    PlayerEntity deleteByUserName(String userName);
+
+    boolean existsByUserName(String userName);
 }

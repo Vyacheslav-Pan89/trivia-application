@@ -30,8 +30,7 @@ public class PlayerController {
 
     @PostMapping("/add")
     public ResponseEntity<PlayerModel> addNewPlayer(@RequestBody PlayerModel playerModel) {
-        playerService.addNewPlayer(playerModel);
-        return ResponseEntity.ok(playerModel);
+        return ResponseEntity.ok(playerService.addNewPlayer(playerModel));
     }// ToDo: test case required
 
     @PutMapping()
@@ -44,5 +43,5 @@ public class PlayerController {
         return ResponseEntity.ok(playerService.deletePlayer(userName));
     }
 
-    //ToDo: More requests, Error Handling and Tests
+    //ToDo: More requests,Validation, Error Handling and Tests
 }
