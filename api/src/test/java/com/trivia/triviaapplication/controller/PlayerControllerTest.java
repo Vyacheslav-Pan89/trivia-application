@@ -1,5 +1,6 @@
 package com.trivia.triviaapplication.controller;
 
+import com.trivia.triviaapplication.dto.GameResult;
 import com.trivia.triviaapplication.exception.PlayerWithUserNameAlreadyExistException;
 import com.trivia.triviaapplication.exception.UserNotFoundByUserNameException;
 import com.trivia.triviaapplication.model.PlayerModel;
@@ -13,10 +14,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,7 +77,7 @@ class PlayerControllerTest {
     }
 
     @Test
-    void addNewPlayerShouldSaveAndReturnPlayerWithUserNameAlreadyExistException() throws Exception {
+    void addNewPlayerShouldReturnPlayerWithUserNameAlreadyExistException() throws Exception {
         when(playerService.addNewPlayer(getListOfPlayerModels().getFirst()))
                 .thenThrow(new PlayerWithUserNameAlreadyExistException
                         ("Player with this username already exist: "
@@ -91,11 +92,62 @@ class PlayerControllerTest {
     }
 
     @Test
-    void updateUserScore() {
+    void updateUserScoreShouldUpdatePlayerScoreAndReturnPlayerWithNewScore() throws Exception {
+        PlayerModel updatedPlayerModel = getListOfPlayerModels().getFirst();
+        updatedPlayerModel.setTotalNumberOfWrongAnswers(1L);
+        updatedPlayerModel.setTotalNumberOfCorrectAnswers(1L);
+
+        when(playerService.updatePlayerScoreByGameResult(any(GameResult.class)))
+                .thenReturn(updatedPlayerModel);
+
+        mockMvc.perform(put("/api/player")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gameResultBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.total_number_of_correct_answers").value(1))
+                .andExpect(jsonPath("$.total_number_of_wrong_answers").value(1))
+                .andExpect(jsonPath("$.user_name").value("Test model 1"));
     }
 
     @Test
-    void deletePlayer() {
+    void updateUserScoreShouldThrowUserNotFoundByUserNameException() throws Exception {
+        when(playerService.updatePlayerScoreByGameResult(getGameResult()))
+                .thenThrow(new UserNotFoundByUserNameException("No such user found: " + getGameResult().getUserName()));
+
+        mockMvc.perform(put("/api/player")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gameResultBody))
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.error")
+                        .value("No such user found: " + getGameResult().getUserName()));
+    }
+
+    @Test
+    void deletePlayerShouldDeletePlayerAndReturnPlayerModel() throws Exception {
+        when(playerService.deletePlayer("Test model 1"))
+                .thenReturn(getListOfPlayerModels().getFirst());
+
+        mockMvc.perform(delete("/api/player/delete").param("user_name", "Test model 1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.user_name").value("Test model 1"));
+    }
+
+    @Test
+    void deletePlayerShouldUserNotFoundByUserNameException() throws Exception {
+        when(playerService.deletePlayer("Test model 1"))
+                .thenThrow(new UserNotFoundByUserNameException("No such user found: " + "Test model 1"));
+
+        mockMvc.perform(delete("/api/player/delete").param("user_name", "Test model 1"))
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.error").value("No such user found: " + "Test model 1"));
+    }
+
+    private GameResult getGameResult() {
+        GameResult gameResult = new GameResult();
+        gameResult.setUserName("Test model 1");
+        gameResult.setNumberOfCorrectAnswers(1L);
+        gameResult.setNumberOfWrongAnswers(1L);
+        return gameResult;
     }
 
     private List<PlayerModel> getListOfPlayerModels() {
@@ -113,7 +165,15 @@ class PlayerControllerTest {
         return List.of(playerModel1, playerModel2);
     }
 
-    String playerModelBody = """
+    private final String gameResultBody = """
+            {
+            "user_name" : "Test model 1",
+            "number_of_correct_answers": 1,
+            "number_of_wrong_answers": 1
+            }
+            """;
+
+    private final String playerModelBody = """
             {
             "user_name": "Test model 1",
             "total_number_of_correct_answers": 0,

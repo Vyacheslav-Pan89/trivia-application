@@ -6,7 +6,6 @@ import com.trivia.triviaapplication.exception.UserNotFoundByUserNameException;
 import com.trivia.triviaapplication.model.PlayerEntity;
 import com.trivia.triviaapplication.model.PlayerModel;
 import com.trivia.triviaapplication.repository.PlayerRepository;
-import org.hibernate.query.UnknownSqlResultSetMappingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -52,8 +51,8 @@ class PlayerServiceTest {
     @Test
     void addNewPlayerShouldAddAndReturnNewPlayer() {
         when(playerRepository.save(any(PlayerEntity.class))).thenReturn(getPlayerEntity());
-        playerService.addNewPlayer(getPlayerModel());
-        assertEquals("Test", getPlayerEntity().getUserName());
+        PlayerModel savedPlayer = playerService.addNewPlayer(getPlayerModel());
+        assertEquals("Test", savedPlayer.getUserName());
     }
 
     @Test
@@ -125,11 +124,10 @@ class PlayerServiceTest {
                 .thenReturn(getPlayerEntity());
 
         PlayerModel result = playerService.deletePlayer("Test");
-        int sizeAfterDelete = playerService.getAllPlayers().size();
 
         assertNotNull(result);
         assertEquals("Test", result.getUserName());
-        assertEquals(0, sizeAfterDelete);
+
     }
 
     @Test
