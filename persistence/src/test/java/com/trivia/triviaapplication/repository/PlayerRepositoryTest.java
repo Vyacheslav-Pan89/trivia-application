@@ -1,6 +1,7 @@
 package com.trivia.triviaapplication.repository;
 
 import com.trivia.triviaapplication.model.PlayerEntity;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,17 @@ public class PlayerRepositoryTest {
         playerRepository.save(playerEntity);
     }
 
+    @AfterEach
+    void cleanup(){
+        playerRepository.deleteAll();
+    }
+
     @Test
     void shouldGenerateIdForNewPlayer() {
         PlayerEntity playerEntity = new PlayerEntity();
         playerEntity.setUserName("Name");
         playerRepository.save(playerEntity);
-        assertThat(playerRepository.findByUserName("Name").get().getId()).isEqualTo(2);
+        assertThat(playerRepository.findByUserName("Name").get().getId()).isNotNull();
     }
 
     @Test
