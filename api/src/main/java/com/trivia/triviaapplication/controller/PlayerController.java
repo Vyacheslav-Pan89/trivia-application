@@ -31,15 +31,15 @@ public class PlayerController {
     @PostMapping("/add")
     public ResponseEntity<PlayerModel> addNewPlayer(@RequestBody PlayerModel playerModel) {
         return ResponseEntity.ok(playerService.addNewPlayer(playerModel));
-    }// ToDo: test case required
+    }
 
     @PutMapping()
     public ResponseEntity<PlayerModel> updateUserScore(@RequestBody GameResult gameResult) {
         return ResponseEntity.ok(playerService.updatePlayerScoreByGameResult(gameResult));
-    }//ToDo: Test cases required!
+    }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<PlayerModel> deletePlayer(@RequestParam(name = "user_name") String userName) {
+    public ResponseEntity<PlayerModel> deletePlayer(@RequestParam(name = "username") String userName) {
         return ResponseEntity.ok(playerService.deletePlayer(userName));
     }
 

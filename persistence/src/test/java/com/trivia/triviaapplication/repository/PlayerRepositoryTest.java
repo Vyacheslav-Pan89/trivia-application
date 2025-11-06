@@ -1,12 +1,10 @@
 package com.trivia.triviaapplication.repository;
 
 import com.trivia.triviaapplication.model.PlayerEntity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Optional;
 
@@ -14,24 +12,18 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 @DataJpaTest
-@ContextConfiguration(classes = TestApplication.class)
 public class PlayerRepositoryTest {
 
     @Autowired
     private PlayerRepository playerRepository;
 
     @BeforeEach
-    void addPlayer() {
+    void addPlayers() {
         PlayerEntity playerEntity = new PlayerEntity();
         playerEntity.setUserName("Test");
         playerEntity.setTotalNumberOfWrongAnswers(1L);
         playerEntity.setTotalNumberOfCorrectAnswers(2L);
         playerRepository.save(playerEntity);
-    }
-
-    @AfterEach
-    void cleanup(){
-        playerRepository.deleteAll();
     }
 
     @Test

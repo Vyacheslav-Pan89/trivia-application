@@ -71,6 +71,7 @@ public class PlayerService {
         return mapPlayerModel(playerEntityToUpdate);
     }//ToDo: Tests.
 
+    @Transactional
     public PlayerModel deletePlayer(String userName) {
         PlayerEntity playerEntityToDelete = getPlayerEntity(userName);
         PlayerEntity playerEntity = playerRepository.deleteByUserName(playerEntityToDelete.getUserName());
@@ -79,7 +80,8 @@ public class PlayerService {
 
     private PlayerEntity getPlayerEntity(String userName) {
         Optional<PlayerEntity> optionalPlayerEntity = playerRepository.findByUserName(userName);
-        return optionalPlayerEntity.orElseThrow(() -> new UserNotFoundByUserNameException("No such user found: " + userName));
+        return optionalPlayerEntity.orElseThrow(()
+                -> new UserNotFoundByUserNameException("No user found with user name: " + userName));
     }
 
     private PlayerModel mapPlayerModel(PlayerEntity playerEntity) {

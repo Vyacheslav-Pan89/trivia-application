@@ -24,13 +24,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundByUserNameException.class)
     public ResponseEntity<Map<String, String>> handleUserNotFoundByUserName(UserNotFoundByUserNameException exception) {
         return new ResponseEntity<>(getError(exception.getMessage()), HttpStatus.NOT_FOUND);
-    } //ToDo: test case required!
+    }
 
     @ExceptionHandler(PlayerWithUserNameAlreadyExistException.class)
     public ResponseEntity<Map<String, String>> handlePlayerWithUserNameAlreadyExistException(
             PlayerWithUserNameAlreadyExistException exception) {
         return new ResponseEntity<>(getError(exception.getMessage()), HttpStatus.BAD_REQUEST);
-    }//ToDo: test case required!
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception exception) {
