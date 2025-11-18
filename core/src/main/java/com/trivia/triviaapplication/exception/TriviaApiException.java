@@ -6,7 +6,4 @@ public class TriviaApiException extends RuntimeException {
         super(message);
     }
 
-    public TriviaApiException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

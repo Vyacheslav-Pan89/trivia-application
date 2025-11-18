@@ -127,7 +127,7 @@ class PlayerControllerTest {
         when(playerService.deletePlayer("Test model 1"))
                 .thenReturn(getListOfPlayerModels().getFirst());
 
-        mockMvc.perform(delete("/api/player/delete").param("user_name", "Test model 1"))
+        mockMvc.perform(delete("/api/player/delete").param("username", "Test model 1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.user_name").value("Test model 1"));
     }
@@ -137,7 +137,7 @@ class PlayerControllerTest {
         when(playerService.deletePlayer("Test model 1"))
                 .thenThrow(new UserNotFoundByUserNameException("No such user found: " + "Test model 1"));
 
-        mockMvc.perform(delete("/api/player/delete").param("user_name", "Test model 1"))
+        mockMvc.perform(delete("/api/player/delete").param("username", "Test model 1"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.error").value("No such user found: " + "Test model 1"));
     }

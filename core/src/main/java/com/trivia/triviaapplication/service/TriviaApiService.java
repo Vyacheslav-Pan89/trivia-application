@@ -34,7 +34,7 @@ public class TriviaApiService {
             }
             return triviaResponse.getResults();
         } catch (RestClientException e) {
-            throw new TriviaApiRequestException("Failed to call Trivia API", e);
+            throw new TriviaApiRequestException("Failed to call Trivia API");
         }
     }
 
@@ -50,7 +50,7 @@ public class TriviaApiService {
             }
             return categoryResponse;
         } catch (RestClientException e) {
-            throw new TriviaApiRequestException("Failed to call Trivia API", e);
+            throw new TriviaApiRequestException("Failed to call Trivia API");
         }
     }
 
