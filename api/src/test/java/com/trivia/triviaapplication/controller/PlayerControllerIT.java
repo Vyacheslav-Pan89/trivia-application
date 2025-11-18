@@ -84,8 +84,8 @@ public class PlayerControllerIT {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(responseBody).isNotNull();
         if (responseBody != null) {
-            assertThat(responseBody.containsKey("error")).isTrue();
-            assertThat(responseBody.get("error")
+            assertThat(responseBody.containsKey("message")).isTrue();
+            assertThat(responseBody.get("message")
                     .contains("Player with this username already exist: " + playerModel.getUserName()));
         }
     }
@@ -94,11 +94,12 @@ public class PlayerControllerIT {
     void getPlayerByUserNameShouldGetPlayerByUserName() {
 
         ResponseEntity<PlayerModel> response = testRestTemplate
-                .exchange("/api/player/get?username=Test model 1",
+                .exchange("/api/player/{username}",
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<>() {
-                        });
+                        },
+                        "Test model 1");
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         if (response.getBody() != null) {
@@ -110,11 +111,12 @@ public class PlayerControllerIT {
     void getPlayerByUserNameShouldReturnUserNotFoundByUserNameException() {
 
         ResponseEntity<Map<String, String>> response = testRestTemplate
-                .exchange("/api/player/get?username=Test model 5",
+                .exchange("/api/player/{username}",
                         HttpMethod.GET,
                         null,
                         new ParameterizedTypeReference<>() {
-                        });
+                        },
+                        "Test model 5");
 
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode().is4xxClientError()).isTrue();
@@ -122,8 +124,8 @@ public class PlayerControllerIT {
         Map<String, String> responseBody = response.getBody();
 
         if (responseBody != null) {
-            assertThat(responseBody.containsKey("error")).isTrue();
-            assertThat(responseBody.get("error"))
+            assertThat(responseBody.containsKey("message")).isTrue();
+            assertThat(responseBody.get("message"))
                     .isEqualTo("No user found with user name: " + "Test model 5");
         }
     }
@@ -190,19 +192,20 @@ public class PlayerControllerIT {
         Map<String, String> responseBody = response.getBody();
 
         if (responseBody != null) {
-            assertThat(responseBody.containsKey("error")).isTrue();
-            assertThat(responseBody.get("error")).isEqualTo("No user found with user name: " + "Test model 5");
+            assertThat(responseBody.containsKey("message")).isTrue();
+            assertThat(responseBody.get("message")).isEqualTo("No user found with user name: " + "Test model 5");
         }
     }
 
     @Test
     void deletePlayerShouldDeleteAndReturnPlayer() {
         ResponseEntity<PlayerModel> response = testRestTemplate
-                .exchange("/api/player/delete?username=Test model 1",
+                .exchange("/api/player/{username}",
                         HttpMethod.DELETE,
                         null,
                         new ParameterizedTypeReference<>() {
-                        });
+                        },
+                        "Test model 1");
 
         assertThat(response.hasBody()).isTrue();
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
@@ -231,11 +234,12 @@ public class PlayerControllerIT {
     @Test
     void deletePlayerShouldReturnUserNotFoundByUserNameException() {
         ResponseEntity<Map<String, String>> response = testRestTemplate
-                .exchange("/api/player/delete?username=Test model 5",
+                .exchange("/api/player/{username}",
                         HttpMethod.DELETE,
                         null,
                         new ParameterizedTypeReference<>() {
-                        });
+                        },
+                        "Test model 5");
 
         assertThat(response.hasBody()).isTrue();
         assertThat(response.getStatusCode().is4xxClientError()).isTrue();
@@ -243,8 +247,8 @@ public class PlayerControllerIT {
         Map<String, String> responseBody = response.getBody();
 
         if (responseBody != null) {
-            assertThat(responseBody.containsKey("error")).isTrue();
-            assertThat(responseBody.get("error")).isEqualTo("No user found with user name: " + "Test model 5");
+            assertThat(responseBody.containsKey("message")).isTrue();
+            assertThat(responseBody.get("message")).isEqualTo("No user found with user name: " + "Test model 5");
         }
 
     }

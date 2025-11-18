@@ -4,6 +4,7 @@ import com.trivia.triviaapplication.dto.GameResult;
 import com.trivia.triviaapplication.model.PlayerModel;
 import com.trivia.triviaapplication.service.PlayerService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,8 @@ public class PlayerController {
         return ResponseEntity.ok(playerService.getAllPlayers());
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<PlayerModel> getPlayerByUserName(@RequestParam(name = "username") String userName) {
+    @GetMapping("/{username}")
+    public ResponseEntity<PlayerModel> getPlayerByUserName(@PathVariable(name = "username") @NotBlank String userName) {
         return ResponseEntity.ok(playerService.getPlayerByUserName(userName));
     }
 
@@ -41,8 +42,8 @@ public class PlayerController {
         return ResponseEntity.ok(playerService.updatePlayerScoreByGameResult(gameResult));
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<PlayerModel> deletePlayer(@RequestParam(name = "username") String userName) {
+    @DeleteMapping("/{username}")
+    public ResponseEntity<PlayerModel> deletePlayer(@PathVariable(name = "username") @NotBlank String userName) {
         return ResponseEntity.ok(playerService.deletePlayer(userName));
     }
 }

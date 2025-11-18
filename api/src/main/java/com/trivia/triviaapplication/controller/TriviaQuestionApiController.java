@@ -4,6 +4,7 @@ import com.trivia.triviaapplication.dto.CategoryResponse;
 import com.trivia.triviaapplication.dto.Question;
 import com.trivia.triviaapplication.dto.QuestionRequest;
 import com.trivia.triviaapplication.service.TriviaApiService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,11 +29,8 @@ public class TriviaQuestionApiController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Question>> getQuestions(QuestionRequest questionRequest) {
+    public ResponseEntity<List<Question>> getQuestions(@Valid QuestionRequest questionRequest) {
         List<Question> questions = triviaApiService.getQuestions(questionRequest);
         return ResponseEntity.ok(questions);
     }
-
-    //ToDo: More requests,Validation, Error Handling and Tests
-
 }

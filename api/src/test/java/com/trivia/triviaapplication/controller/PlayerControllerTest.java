@@ -59,7 +59,7 @@ class PlayerControllerTest {
         when(playerService.getPlayerByUserName("Test model 1"))
                 .thenReturn(getListOfPlayerModels().getFirst());
 
-        mockMvc.perform(get("/api/player/get?username=Test model 1"))
+        mockMvc.perform(get("/api/player/Test model 1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.user_name").value("Test model 1"));
     }
@@ -71,7 +71,7 @@ class PlayerControllerTest {
 
         mockMvc.perform(get("/api/player/get?username=Test model 1"))
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.error").value("No user found with user name: " + "Test Model 1"));
+                .andExpect(jsonPath("$.message").value("No user found with user name: " + "Test Model 1"));
     }
 
     @Test
@@ -100,7 +100,7 @@ class PlayerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(playerModelBody))
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.error")
+                .andExpect(jsonPath("$.message")
                         .value("Player with this username already exist: " + getListOfPlayerModels().getFirst().getUserName()));
     }
 
@@ -131,7 +131,7 @@ class PlayerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(gameResultBody))
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.error")
+                .andExpect(jsonPath("$.message")
                         .value("No such user found: " + getGameResult().getUserName()));
     }
 
@@ -140,7 +140,7 @@ class PlayerControllerTest {
         when(playerService.deletePlayer("Test model 1"))
                 .thenReturn(getListOfPlayerModels().getFirst());
 
-        mockMvc.perform(delete("/api/player/delete").param("username", "Test model 1"))
+        mockMvc.perform(delete("/api/player/{username}", "Test model 1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.user_name").value("Test model 1"));
     }
@@ -150,9 +150,9 @@ class PlayerControllerTest {
         when(playerService.deletePlayer("Test model 1"))
                 .thenThrow(new UserNotFoundByUserNameException("No such user found: " + "Test model 1"));
 
-        mockMvc.perform(delete("/api/player/delete").param("username", "Test model 1"))
+        mockMvc.perform(delete("/api/player/{username}", "Test model 1"))
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.error").value("No such user found: " + "Test model 1"));
+                .andExpect(jsonPath("$.message").value("No such user found: " + "Test model 1"));
     }
 
     private GameResult getGameResult() {

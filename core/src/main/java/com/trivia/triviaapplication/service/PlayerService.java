@@ -6,8 +6,8 @@ import com.trivia.triviaapplication.exception.UserNotFoundByUserNameException;
 import com.trivia.triviaapplication.model.PlayerEntity;
 import com.trivia.triviaapplication.model.PlayerModel;
 import com.trivia.triviaapplication.repository.PlayerRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,14 +69,14 @@ public class PlayerService {
                         + gameResult.getNumberOfCorrectAnswers());
         playerRepository.save(playerEntityToUpdate);
         return mapPlayerModel(playerEntityToUpdate);
-    }//ToDo: Tests.
+    }
 
     @Transactional
     public PlayerModel deletePlayer(String userName) {
         PlayerEntity playerEntityToDelete = getPlayerEntity(userName);
         PlayerEntity playerEntity = playerRepository.deleteByUserName(playerEntityToDelete.getUserName());
         return mapPlayerModel(playerEntity);
-    }//ToDo: Test Case Required
+    }
 
     private PlayerEntity getPlayerEntity(String userName) {
         Optional<PlayerEntity> optionalPlayerEntity = playerRepository.findByUserName(userName);

@@ -48,12 +48,12 @@ public class TriviaQuestionApiControllerTest {
     @Test
     public void getQuestionsShouldReturnTriviaApiRequestExceptionWhenTriviaApiFails() throws Exception {
         when(triviaApiService.getQuestions(any(QuestionRequest.class)))
-                .thenThrow(new TriviaApiRequestException("No response or invalid response from Trivia API"));
+                .thenThrow(new TriviaApiRequestException("Validation failed"));
 
         mockMvc.perform(get("/api/questions?amount=0"))
-                .andExpect(status().isBadGateway())
-                .andExpect(jsonPath("$.error")
-                        .value("No response or invalid response from Trivia API"));
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message")
+                        .value("Validation failed"));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class TriviaQuestionApiControllerTest {
 
         mockMvc.perform(get("/api/questions"))
                 .andExpect(status().isBadGateway())
-                .andExpect(jsonPath("$.error")
+                .andExpect(jsonPath("$.message")
                         .value("Failed to call Trivia API"));
     }
 
@@ -93,7 +93,7 @@ public class TriviaQuestionApiControllerTest {
         mockMvc.perform(get("/api/questions/categories"))
                 .andExpect(status().is5xxServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.error")
+                .andExpect(jsonPath("$.message")
                         .value("No response or invalid response from Trivia API"));
 
     }
