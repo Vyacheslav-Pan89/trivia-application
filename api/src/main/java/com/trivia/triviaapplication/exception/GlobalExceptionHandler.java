@@ -1,5 +1,6 @@
 package com.trivia.triviaapplication.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,6 +32,13 @@ public class GlobalExceptionHandler {
             PlayerWithUserNameAlreadyExistException exception) {
         return new ResponseEntity<>(getError(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleConstraintViolationException(
+            ConstraintViolationException exception) {
+        return new ResponseEntity<>(getError(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception exception) {

@@ -18,15 +18,13 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.fail;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PlayerControllerIT {
 
+    private final String urlTemplate = "http://localhost:";
     @Autowired
     private TestRestTemplate testRestTemplate;
-    private final String urlTemplate = "http://localhost:";
-
     @LocalServerPort
     private int port;
 
@@ -35,12 +33,16 @@ public class PlayerControllerIT {
 
         PlayerModel playerModel1 = new PlayerModel();
         playerModel1.setUserName("Test model 1");
+        playerModel1.setTotalNumberOfWrongAnswers(0L);
+        playerModel1.setTotalNumberOfCorrectAnswers(0L);
         testRestTemplate.postForEntity(urlTemplate + port + "/api/player/add",
                 playerModel1,
                 PlayerModel.class);
 
         PlayerModel playerModel2 = new PlayerModel();
         playerModel2.setUserName("Test model 2");
+        playerModel2.setTotalNumberOfWrongAnswers(0L);
+        playerModel2.setTotalNumberOfCorrectAnswers(0L);
         testRestTemplate.postForEntity(urlTemplate + port + "/api/player/add",
                 playerModel2,
                 PlayerModel.class);
@@ -50,6 +52,8 @@ public class PlayerControllerIT {
     void addNewPlayerShouldAddAndReturnPlayerModel() {
         PlayerModel playerModel = new PlayerModel();
         playerModel.setUserName("Test model 3");
+        playerModel.setTotalNumberOfCorrectAnswers(0L);
+        playerModel.setTotalNumberOfWrongAnswers(0L);
 
         ResponseEntity<PlayerModel> response = testRestTemplate
                 .postForEntity(urlTemplate + port + "/api/player/add", playerModel, PlayerModel.class);
@@ -63,6 +67,8 @@ public class PlayerControllerIT {
     void addNewPlayerShouldReturnPlayerWithUserNameAlreadyExistMessage() {
         PlayerModel playerModel = new PlayerModel();
         playerModel.setUserName("Test model 1");
+        playerModel.setTotalNumberOfWrongAnswers(0L);
+        playerModel.setTotalNumberOfCorrectAnswers(0L);
 
         ResponseEntity<Map<String, String>> response = testRestTemplate
                 .exchange(urlTemplate + port + "/api/player/add",

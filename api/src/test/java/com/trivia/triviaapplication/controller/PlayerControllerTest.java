@@ -24,9 +24,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(PlayerController.class)
 class PlayerControllerTest {
 
+    private final String gameResultBody = """
+            {
+            "user_name" : "Test model 1",
+            "number_of_correct_answers": 1,
+            "number_of_wrong_answers": 1
+            }
+            """;
+    private final String playerModelBody = """
+            {
+            "user_name": "Test model 1",
+            "total_number_of_correct_answers": 0,
+            "total_number_of_wrong_answers": 0
+            }
+            """;
     @Autowired
     private MockMvc mockMvc;
-
     @MockitoBean
     private PlayerService playerService;
 
@@ -164,20 +177,4 @@ class PlayerControllerTest {
 
         return List.of(playerModel1, playerModel2);
     }
-
-    private final String gameResultBody = """
-            {
-            "user_name" : "Test model 1",
-            "number_of_correct_answers": 1,
-            "number_of_wrong_answers": 1
-            }
-            """;
-
-    private final String playerModelBody = """
-            {
-            "user_name": "Test model 1",
-            "total_number_of_correct_answers": 0,
-            "total_number_of_wrong_answers": 0
-            }
-            """;
 }

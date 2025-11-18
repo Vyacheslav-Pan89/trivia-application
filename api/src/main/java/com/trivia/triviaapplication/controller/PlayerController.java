@@ -3,13 +3,16 @@ package com.trivia.triviaapplication.controller;
 import com.trivia.triviaapplication.dto.GameResult;
 import com.trivia.triviaapplication.model.PlayerModel;
 import com.trivia.triviaapplication.service.PlayerService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/player")
+@Validated
 public class PlayerController {
 
     private final PlayerService playerService;
@@ -29,12 +32,12 @@ public class PlayerController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<PlayerModel> addNewPlayer(@RequestBody PlayerModel playerModel) {
+    public ResponseEntity<PlayerModel> addNewPlayer(@Valid @RequestBody PlayerModel playerModel) {
         return ResponseEntity.ok(playerService.addNewPlayer(playerModel));
     }
 
     @PutMapping()
-    public ResponseEntity<PlayerModel> updateUserScore(@RequestBody GameResult gameResult) {
+    public ResponseEntity<PlayerModel> updateUserScore(@Valid @RequestBody GameResult gameResult) {
         return ResponseEntity.ok(playerService.updatePlayerScoreByGameResult(gameResult));
     }
 
@@ -42,6 +45,4 @@ public class PlayerController {
     public ResponseEntity<PlayerModel> deletePlayer(@RequestParam(name = "username") String userName) {
         return ResponseEntity.ok(playerService.deletePlayer(userName));
     }
-
-    //ToDo: More requests,Validation, Error Handling and Tests
 }

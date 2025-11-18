@@ -1,11 +1,13 @@
 package com.trivia.triviaapplication.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 public class TriviaResponse {
-    private int response_code;
+    @JsonProperty(value = "response_code")
+    private int responseCode;
     private List<Question> results;
 }
