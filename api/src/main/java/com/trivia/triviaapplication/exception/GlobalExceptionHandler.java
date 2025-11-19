@@ -34,24 +34,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(PlayerWithUserNameAlreadyExistException.class)
-    public ResponseEntity<Map<String, Object>> handlePlayerWithUserNameAlreadyExistException(
-            PlayerWithUserNameAlreadyExistException exception) {
+    public ResponseEntity<Map<String, Object>> handlePlayerWithUserNameAlreadyExistException(PlayerWithUserNameAlreadyExistException exception) {
         return new ResponseEntity<>(getError(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, Object>> handleConstraintViolationException(
-            ConstraintViolationException exception) {
+    public ResponseEntity<Map<String, Object>> handleConstraintViolationException(ConstraintViolationException exception) {
 
         Map<String, Object> body = getError("Validation failed");
 
-        Map<String, String> violations = exception.getConstraintViolations()
-                .stream()
-                .collect(Collectors.toMap(
-                        violation -> violation.getPropertyPath().toString(),
-                        ConstraintViolation::getMessage,
-                        (first, second) -> first
-                ));
+        Map<String, String> violations = exception.getConstraintViolations().stream().collect(Collectors.toMap(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage, (first, second) -> first));
 
         body.put("violations", violations);
 
@@ -59,23 +51,25 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException exception) {
+    public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
 
         Map<String, Object> body = getError("Validation failed");
 
-        Map<String, String> fieldErrors = exception.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .collect(Collectors.toMap(
-                        FieldError::getField,
-                        DefaultMessageSourceResolvable::getDefaultMessage,
-                        (first, second) -> first
-                ));
+        Map<String, String> fieldErrors = exception.getBindingResult().getFieldErrors().stream().collect(Collectors.toMap(FieldError::getField, DefaultMessageSourceResolvable::getDefaultMessage, (first, second) -> first));
 
         body.put("fieldErrors", fieldErrors);
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(GameSessionNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleGameSessionNotFoundException(GameSessionNotFoundException exception) {
+        return new ResponseEntity<>(getError(exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalStateException exception) {
+        return new ResponseEntity<>(getError(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

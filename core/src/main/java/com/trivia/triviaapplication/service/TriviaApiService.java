@@ -9,6 +9,8 @@ import com.trivia.triviaapplication.exception.TriviaApiResponseException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class TriviaApiService {
 
     public List<Question> getQuestions(QuestionRequest questionRequest) {
 
-        String requestUrl = getString(questionRequest);
+        String requestUrl = getString(questionRequest);        
 
         try {
             TriviaResponse triviaResponse = restTemplate
@@ -32,7 +34,16 @@ public class TriviaApiService {
             if (triviaResponse == null || triviaResponse.getResults() == null || triviaResponse.getResults().isEmpty()) {
                 throw new TriviaApiRequestException("No response or invalid response from Trivia API");
             }
-            return triviaResponse.getResults();
+
+            List<Question> results = triviaResponse.getResults();
+            results.forEach(q -> {
+                q.setQuestion(HtmlUtils.htmlUnescape(q.getQuestion()));
+                q.setCorrectAnswer(HtmlUtils.htmlUnescape(q.getCorrectAnswer()));
+                q.setIncorrectAnswers(q.getIncorrectAnswers().stream()
+                        .map(HtmlUtils::htmlUnescape)
+                        .toList());
+            });
+            return results;
         } catch (RestClientException e) {
             throw new TriviaApiRequestException("Failed to call Trivia API");
         }
@@ -55,16 +66,19 @@ public class TriviaApiService {
     }
 
     private String getString(QuestionRequest questionRequest) {
-        String requestUrl = apiUrl + "/api.php" + "?amount=" + questionRequest.getAmount();
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiUrl + "/api.php")
+                .queryParam("amount", questionRequest.getAmount());
+
         if (questionRequest.getCategory() != null) {
-            requestUrl += "&category=" + questionRequest.getCategory();
+            builder.queryParam("category", questionRequest.getCategory());
         }
         if (questionRequest.getDifficulty() != null) {
-            requestUrl += "&difficulty=" + questionRequest.getDifficulty();
+            builder.queryParam("difficulty", questionRequest.getDifficulty());
         }
         if (questionRequest.getType() != null) {
-            requestUrl += "&type=" + questionRequest.getType();
+            builder.queryParam("type", questionRequest.getType());
         }
-        return requestUrl;
+
+        return builder.toUriString();
     }
 }
